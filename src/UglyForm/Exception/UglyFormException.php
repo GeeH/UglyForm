@@ -5,7 +5,7 @@
  * Time: 11:13
  */
 
-namespace UglyForm\Form\Exception;
+namespace UglyForm\Exception;
 
 
 class UglyFormException extends \Exception

@@ -24,7 +24,7 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $output = '<input name="test" value="" class="input" type="text" />';
         $this->assertEquals($output, $renderer->render($form, 'test', array('class' => 'input')));
 
-        $form->setDefaultAttributes(
+        $form->setDefaultElementAttributes(
             array(
                 'class' => 'class'
             )

@@ -40,14 +40,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->form->addElement('element1');
     }
 
-    public function testDefaultAttributes()
+    public function testDefaultElementAttributes()
     {
-        $this->form->setDefaultAttributes(
+        $this->form->setDefaultElementAttributes(
             array(
                 'class' => 'input'
             )
         );
-        $this->assertCount(1, $this->form->getDefaultAttributes());
+        $this->assertCount(1, $this->form->getDefaultElementAttributes());
     }
 
 }

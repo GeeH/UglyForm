@@ -42,6 +42,16 @@ class Element
     protected $filters = array();
 
     /**
+     * @param $name
+     * @param string $tag
+     */
+    function __construct($name, $tag = 'input')
+    {
+        $this->setName($name);
+        $this->setTag($tag);
+    }
+
+    /**
      * @return array
      */
     public function getFilters()
@@ -95,6 +105,17 @@ class Element
     public function setTag($tag)
     {
         $this->tag = $tag;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        if (method_exists($this->getValidator(), 'validate')) {
+            return $this->getValidator()->validate($this->getValue());
+        }
+        return true;
     }
 
     /**

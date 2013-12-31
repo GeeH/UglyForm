@@ -7,7 +7,7 @@
 
 namespace UglyForm\Exception;
 
-class DuplicateElementException extends UglyFormException
+class FormElementException extends UglyFormException
 {
 
 } 
