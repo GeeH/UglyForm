@@ -1,13 +1,17 @@
 <?php
-/**
- * User: garyhockin
- * Date: 31/12/2013
- * Time: 09:48
- */
 
 namespace UglyForm\Filter;
 
 
-interface FilterInterface {
-
+/**
+ * Interface FilterInterface
+ * @package UglyForm\Filter
+ */
+interface FilterInterface
+{
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function filter($value);
 } 

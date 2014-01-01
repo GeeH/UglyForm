@@ -22,6 +22,10 @@ class Form
      * @var array
      */
     protected $defaultElementAttributes = array();
+    /**
+     * @var bool
+     */
+    protected $valid;
 
     /**
      * @param $name
@@ -115,5 +119,10 @@ class Form
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function isValid()
+    {
+
     }
 } 

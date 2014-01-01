@@ -8,7 +8,18 @@
 namespace UglyForm\Filter;
 
 
-class StripWhitespace 
+/**
+ * Class StripWhitespace
+ * @package UglyForm\Filter
+ */
+class StripWhitespace implements FilterInterface
 {
-
+    /**
+     * @param $value
+     * @return string
+     */
+    public function filter($value)
+    {
+        return trim($value);
+    }
 } 

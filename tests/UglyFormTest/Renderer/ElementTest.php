@@ -8,6 +8,7 @@
 namespace FormTest\Renderer;
 
 use UglyForm\Form\Form;
+use UglyForm\Renderer\Element;
 
 class ElementTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,12 +17,12 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $form = new Form('testForm');
         $form->addElement('test');
 
-        $renderer = new \UglyForm\Renderer\Element();
+        $renderer = new Element();
 
-        $output = '<input name="test" value="" type="text" />';
+        $output = '<input name="test" value="" type="text" id="testForm-test" />';
         $this->assertEquals($output, $renderer->render($form, 'test'));
 
-        $output = '<input name="test" value="" class="input" type="text" />';
+        $output = '<input name="test" value="" type="text" id="testForm-test" class="input" />';
         $this->assertEquals($output, $renderer->render($form, 'test', array('class' => 'input')));
 
         $form->setDefaultElementAttributes(
@@ -29,12 +30,24 @@ class ElementTest extends \PHPUnit_Framework_TestCase
                 'class' => 'class'
             )
         );
-        $output = '<input name="test" value="" class="class" type="password" />';
+        $output = '<input name="test" value="" class="input" type="password" id="testForm-test" />';
         $this->assertEquals($output, $renderer->render($form, 'test', array('type' => 'password')));
 
-        $output = '<input name="test" value="" class="input" type="password" />';
-        $this->assertEquals($output, $renderer->render($form, 'test', array('class' => 'input', 'type' => 'password')));
+        $output = '<input name="test" value="" class="input" type="password" id="my-input" />';
+        $this->assertEquals(
+            $output,
+            $renderer->render($form, 'test', array('id' => 'my-input', 'class' => 'input', 'type' => 'password'))
+        );
 
+    }
+
+    public function testAttributesGetSet()
+    {
+        $form = new Form('testForm');
+        $form->addElement('testElement');
+        $renderer = new Element();
+        $renderer->render($form, 'testElement', array('id' => 'testId'));
+        $this->assertArrayHasKey('id', $form->getElement('testElement')->getattributes());
     }
 
 }

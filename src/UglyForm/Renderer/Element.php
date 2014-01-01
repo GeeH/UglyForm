@@ -10,18 +10,30 @@ namespace UglyForm\Renderer;
 
 use UglyForm\Form\Form;
 
+/**
+ * Class Element
+ * @package UglyForm\Renderer
+ */
 class Element implements RendererInterface
 {
+    use RendererTrait;
+
+    /**
+     *  Default input type if none is given
+     */
     const DEFAULT_INPUT_TYPE = 'text';
 
+    /**
+     * @param Form $form
+     * @param $name
+     * @param array $attributes
+     * @return string
+     */
     public function render(Form $form, $name, array $attributes = array())
     {
         $element = $form->getElement($name);
-        $attributes = array_merge($form->getDefaultElementAttributes(), $attributes);
 
-        if (!array_key_exists('type', $attributes)) {
-            $attributes['type'] = constant('self::DEFAULT_' . strtoupper($element->getTag()) . '_TYPE');
-        }
+        $attributes = $this->mergeAttributes($form, $element, $attributes);
 
         $html = "<{$element->getTag()} "
             . "name=\"{$element->getName()}\" "
