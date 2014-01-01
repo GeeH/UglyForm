@@ -137,4 +137,14 @@ class Form
     {
         return $this->elements;
     }
+
+    /**
+     * @param array $data
+     */
+    public function loadData(array $data)
+    {
+        foreach($data as $name => $value) {
+            $this->getElement($name)->setValue($value);
+        }
+    }
 } 
