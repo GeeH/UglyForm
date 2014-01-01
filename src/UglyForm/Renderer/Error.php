@@ -31,12 +31,17 @@ class Error implements RendererInterface
             return '';
         }
 
+        $tag = $attributes['tag'];
+        unset($attributes['tag']);
 
-        $html = "<{$attributes['tag']} ";
+        $message = $attributes['message'];
+        unset($attributes['message']);
+
+        $html = "<{$tag} ";
         foreach ($attributes as $key => $value) {
             $html .= "{$key}=\"{$value}\" ";
         }
-        $html .= ">{$attributes['message']}</{$attributes['tag']}>";
+        $html .= ">{$message}</{$tag}>";
         return $html;
     }
 } 

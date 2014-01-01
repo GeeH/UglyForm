@@ -3,6 +3,7 @@
 namespace FormTest\Form;
 
 
+use Respect\Validation\Validator;
 use UglyForm\Form\Form;
 
 class FormTest extends \PHPUnit_Framework_TestCase
@@ -48,6 +49,30 @@ class FormTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->assertCount(1, $this->form->getDefaultElementAttributes());
+    }
+
+    public function testIsValidWhenValid()
+    {
+        $form = new Form('form');
+        $element = $form->addElement('element');
+        $element->setValidator(Validator::create()->alwaysValid());
+
+        $otherElement = $form->addElement('other-element');
+        $otherElement->setValidator(Validator::create()->alwaysValid());
+
+        $this->assertTrue($form->isValid());
+    }
+
+    public function testIsValidWhenInvalid()
+    {
+        $form = new Form('form');
+        $element = $form->addElement('element');
+        $element->setValidator(Validator::create()->alwaysValid());
+
+        $otherElement = $form->addElement('other-element');
+        $otherElement->setValidator(Validator::create()->alwaysInvalid());
+
+        $this->assertFalse($form->isValid());
     }
 
 }

@@ -98,14 +98,6 @@ class Form
     }
 
     /**
-     * @return array
-     */
-    public function getElements()
-    {
-        return $this->elements;
-    }
-
-    /**
      * @return mixed
      */
     public function getName()
@@ -121,8 +113,28 @@ class Form
         $this->name = $name;
     }
 
+    /**
+     * @return bool
+     */
     public function isValid()
     {
+        if (!is_bool($this->valid)) {
+            $isValid = true;
+            foreach ($this->getElements() as $element) {
+                if (!$element->isValid()) {
+                    $isValid = false;
+                }
+            }
+            $this->valid = $isValid;
+        }
+        return $this->valid;
+    }
 
+    /**
+     * @return Element[]
+     */
+    public function getElements()
+    {
+        return $this->elements;
     }
 } 
