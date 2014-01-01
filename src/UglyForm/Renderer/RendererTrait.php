@@ -20,9 +20,10 @@ trait RendererTrait
      * @param Form $form
      * @param Element $element
      * @param array $attributes
+     * @param bool $pushBack
      * @return array
      */
-    public function mergeAttributes(Form $form, Element $element, array $attributes)
+    public function mergeAttributes(Form $form, Element $element, array $attributes, $pushBack = true)
     {
         $attributes = array_merge($form->getDefaultElementAttributes(), $element->getattributes(), $attributes);
 
@@ -35,7 +36,10 @@ trait RendererTrait
         if (!array_key_exists('id', $attributes)) {
             $attributes['id'] = $form->getName() . '-' . $element->getName();
         }
-        $element->setattributes($attributes);
+
+        if ($pushBack) {
+            $element->setattributes($attributes);
+        }
 
         return $attributes;
     }
