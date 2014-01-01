@@ -29,5 +29,23 @@ class RendererTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('element-class', $attributes['class']);
         $this->assertEquals(Element::DEFAULT_INPUT_TYPE, $attributes['type']);
     }
+
+    public function testPushbackDoesntPushBack()
+    {
+        $asset = new RendererTraitAsset();
+        $form = new Form('form');
+        $element = $form->addElement('element');
+        $attributes = array('id' => 'attribute-id');
+
+        $element->setattributes(
+            array('class' => 'element-class', 'id' => 'element-id')
+        );
+
+        $form->setDefaultElementAttributes(array('class' => 'form-class'));
+
+        $attributes = $asset->mergeAttributes($form, $element, $attributes, false);
+
+        $this->assertEmpty($attributes);
+    }
 }
  
