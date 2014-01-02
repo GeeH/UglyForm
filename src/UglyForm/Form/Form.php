@@ -147,4 +147,17 @@ class Form
             $this->getElement($name)->setValue($value);
         }
     }
+
+    /**
+     * @return array
+     */
+    public function getValues()
+    {
+        $values = array();
+        foreach($this->getElements() as $element)
+        {
+            $values[$element->getName()] = $element->getValue();
+        }
+        return $values;
+    }
 } 

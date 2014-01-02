@@ -22,6 +22,10 @@ class Element implements RendererInterface
      *  Default input type if none is given
      */
     const DEFAULT_INPUT_TYPE = 'text';
+    /**
+     * Default button type
+     */
+    const DEFAULT_BUTTON_TYPE = 'submit';
 
     /**
      * @param Form $form
@@ -36,14 +40,22 @@ class Element implements RendererInterface
         $attributes = $this->mergeAttributes($form, $element, $attributes);
 
         $html = "<{$element->getTag()} "
-            . "name=\"{$element->getName()}\" "
-            . "value=\"{$element->getValue()}\" ";
+            . "name=\"{$element->getName()}\" ";
+
+        if (!in_array($element->getTag(), $this->inLineTags)) {
+            $html .= "value=\"{$element->getValue()}\" ";
+        }
+
 
         foreach ($attributes as $key => $value) {
             $html .= "{$key}=\"{$value}\" ";
         }
 
-        $html .= '/>';
+        if (!in_array($element->getTag(), $this->inLineTags)) {
+            $html .= '/>';
+        } else {
+            $html .= ">{$element->getValue()}</{$element->getTag()}>";
+        }
 
         return $html;
     }

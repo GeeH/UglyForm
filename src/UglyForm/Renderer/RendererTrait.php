@@ -7,24 +7,28 @@
 
 namespace UglyForm\Renderer;
 
-use UglyForm\Form\Element;
-use UglyForm\Form\Form;
-
 /**
  * Class RendererTrait
  * @package UglyForm\Renderer
  */
 trait RendererTrait
 {
+
+    protected $inLineTags = array('button', 'submit', 'textarea');
+
     /**
-     * @param Form $form
-     * @param Element $element
+     * @param \UglyForm\Form\Form $form
+     * @param \UglyForm\Form\Element $element
      * @param array $attributes
      * @param bool $pushBack
      * @return array
      */
-    public function mergeAttributes(Form $form, Element $element, array $attributes, $pushBack = true)
-    {
+    public function mergeAttributes(
+        \UglyForm\Form\Form $form,
+        \UglyForm\Form\Element $element,
+        array $attributes,
+        $pushBack = true
+    ) {
         $attributes = array_merge($form->getDefaultElementAttributes(), $element->getattributes(), $attributes);
 
         if (!array_key_exists('type', $attributes)) {

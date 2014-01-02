@@ -50,5 +50,17 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('id', $form->getElement('testElement')->getattributes());
     }
 
+    public function testInlineTagRendersInline()
+    {
+        $form = new Form('testForm');
+        $form->addElement('testElement')->setTag('button');
+        $form->getElement('testElement')->setValue('Button');
+        $renderer = new Element();
+
+        $output = '<button name="testElement" type="submit" id="testForm-testElement" >Button</button>';
+        $this->assertEquals($output, $renderer->render($form, 'testElement'));
+    }
+
+
 }
  

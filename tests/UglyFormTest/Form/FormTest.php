@@ -84,5 +84,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data['element'], $this->form->getElement('element')->getValue());
     }
 
+    public function testGetValues()
+    {
+        $this->form->addElement('element');
+        $data = array('element' => 'fishcake');
+        $this->form->loadData($data);
+
+        $this->assertEquals($data['element'], $this->form->getValues()['element']);
+
+    }
 }
  
