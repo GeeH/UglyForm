@@ -33,7 +33,7 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
         $element->setValidator(Validator::create()->alwaysInvalid());
         $renderer = new Error();
 
-        $output = '<div >Validation Error</div>';
+        $output = '<div>Validation Error</div>';
         $this->assertEquals($output, $renderer->render($form, 'element'));
     }
 
@@ -50,7 +50,7 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
             'class' => 'error-message',
         );
 
-        $output = '<span class="error-message" >Element must contain a chipmunk</span>';
+        $output = '<span class="error-message">Element must contain a chipmunk</span>';
         $this->assertEquals($output, $renderer->render($form, 'element', $attribute));
     }
 }
