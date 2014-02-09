@@ -19,12 +19,13 @@ class Error implements RendererInterface
     public function render(Form $form, $name, array $attributes = array())
     {
         $element = $form->getElement($name);
+
         if (!array_key_exists('tag', $attributes)) {
             $attributes['tag'] = self::DEFAULT_ERROR_TAG;
         }
+
         if (!array_key_exists('message', $attributes)) {
             $attributes['message'] = self::DEFAULT_ERROR_MESSAGE;
-
         }
 
         if ($element->isValid()) {
@@ -41,6 +42,9 @@ class Error implements RendererInterface
         foreach ($attributes as $key => $value) {
             $html .= "{$key}=\"{$value}\" ";
         }
+
+        $html = trim($html);
+
         $html .= ">{$message}</{$tag}>";
         return $html;
     }

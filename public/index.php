@@ -15,8 +15,12 @@ $form->setDefaultElementAttributes(
     )
 );
 
-$renderer = new \UglyForm\Renderer\Element();
-$labelRenderer = new \UglyForm\Renderer\Label();
+$renderer = new \UglyForm\Renderer\Row();
+$renderer->setWrapperAttributes(
+    array(
+        'class' => 'form-group'
+    )
+);
 ?>
 
 <!DOCTYPE html>
@@ -37,19 +41,11 @@ $labelRenderer = new \UglyForm\Renderer\Label();
 <body>
 
 <div class="container well well-lg">
-    <form name="form" method="post" role="form">
-        <div class="form-group col-lg-4">
-            <?php echo $labelRenderer->render($form, 'username') .
-                $renderer->render($form, 'username'); ?>
-        </div>
-        <div class="form-group col-lg-4">
-            <?php echo $labelRenderer->render($form, 'password') .
-                $renderer->render($form, 'password', array('type' => 'password')); ?>
-        </div>
-        <div class="form-group col-lg-4">
-            <?php
-                echo $renderer->render($form, 'submit', array('type' => 'password')); ?>
-        </div>
+    <form class="form-inline" name="form" method="post" role="form">
+        <?php echo $renderer->render($form, 'username'); ?>
+        <?php echo $renderer->render($form, 'password'); ?>
+        <?php $renderer->setRenderLabel(false); ?>
+        <?php echo $renderer->render($form, 'submit'); ?>
     </form>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
