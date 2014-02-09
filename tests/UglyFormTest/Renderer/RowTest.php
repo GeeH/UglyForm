@@ -55,6 +55,18 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($output, $this->renderer->render($form, 'username'));
     }
 
+    public function testRenderingWithSpanWrapper()
+    {
+        $form = new Form('test');
+        $form->addElement('username');
+        $this->renderer->setWrapper('span');
+        $this->renderer->setRenderLabel(false);
+        $this->renderer->setRenderError(false);
+
+        $output = '<span><input name="username" value="" type="text" id="test-username" /></span>';
+        $this->assertEquals($output, $this->renderer->render($form, 'username'));
+    }
+
     public function testRenderingWithErrorRendererAndNoErrors()
     {
         $form = new Form('test');
