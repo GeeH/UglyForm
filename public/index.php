@@ -3,8 +3,8 @@ chdir('../');
 require_once('vendor/autoload.php');
 
 $form = new \UglyForm\Form\Form('login');
-$form->addElement('username')->setValidator(\Respect\Validation\Validator::create()->email());
-$form->addElement('password')->setValidator(\Respect\Validation\Validator::create()->string()->notEmpty()->min(5));
+$form->addElement('username')->setValidator(\Respect\Validation\Validator::create()->email()->notEmpty());
+$form->addElement('password')->setValidator(\Respect\Validation\Validator::create()->string()->notEmpty()->length(5, 256));
 $form->addElement('submit')->setTag('button');
 $form->getElement('submit')->setAttributes(array('type' => 'submit'));
 $form->getElement('submit')->setValue('Login');
@@ -14,6 +14,10 @@ $form->setDefaultElementAttributes(
         'class' => 'form-control col-xs-6'
     )
 );
+
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $form->setValues($_POST);
+}
 
 $renderer = new \UglyForm\Renderer\Row();
 $renderer->setWrapperAttributes(

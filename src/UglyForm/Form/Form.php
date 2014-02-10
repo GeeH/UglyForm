@@ -26,6 +26,10 @@ class Form
      * @var bool
      */
     protected $valid;
+    /**
+     * @var bool
+     */
+    protected $populated = false;
 
     /**
      * @param $name
@@ -83,21 +87,6 @@ class Form
     }
 
     /**
-     * @param $name
-     * @return Element
-     * @throws \UglyForm\Exception\FormElementException
-     */
-    public function getElement($name)
-    {
-        foreach ($this->elements as $element) {
-            if ($element->getName() === $name) {
-                return $element;
-            }
-        }
-        throw new FormElementException("Element `$name` does not exist`");
-    }
-
-    /**
      * @return mixed
      */
     public function getName()
@@ -143,9 +132,24 @@ class Form
      */
     public function loadData(array $data)
     {
-        foreach($data as $name => $value) {
+        foreach ($data as $name => $value) {
             $this->getElement($name)->setValue($value);
         }
+    }
+
+    /**
+     * @param $name
+     * @return Element
+     * @throws \UglyForm\Exception\FormElementException
+     */
+    public function getElement($name)
+    {
+        foreach ($this->elements as $element) {
+            if ($element->getName() === $name) {
+                return $element;
+            }
+        }
+        throw new FormElementException("Element `$name` does not exist`");
     }
 
     /**
@@ -154,10 +158,39 @@ class Form
     public function getValues()
     {
         $values = array();
-        foreach($this->getElements() as $element)
-        {
+        foreach ($this->getElements() as $element) {
             $values[$element->getName()] = $element->getValue();
         }
         return $values;
+    }
+
+    /**
+     * @param array $values
+     */
+    public function setValues(array $values)
+    {
+        foreach ($values as $element => $value) {
+            $element = $this->getElement($element);
+            if($element->getTag() !== 'button') {
+                $element->setValue($value);
+            }
+        }
+        $this->setPopulated(true);
+    }
+
+    /**
+     * @param boolean $populated
+     */
+    public function setPopulated($populated)
+    {
+        $this->populated = $populated;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getPopulated()
+    {
+        return $this->populated;
     }
 } 

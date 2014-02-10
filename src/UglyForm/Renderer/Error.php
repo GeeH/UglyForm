@@ -18,6 +18,10 @@ class Error implements RendererInterface
 
     public function render(Form $form, $name, array $attributes = array())
     {
+        if(is_null($form->isValid()) || $form->isValid() || !$form->getPopulated()) {
+            return false;
+        }
+
         $element = $form->getElement($name);
 
         if (!array_key_exists('tag', $attributes)) {

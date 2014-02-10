@@ -144,16 +144,20 @@ class Element
      */
     public function isValid()
     {
-        if (!is_bool($this->valid) && !is_null($this->getValidator())) {
+
+        if(is_null($this->getValidator())) {
+            $this->valid = true;
+        }
+
+        if (!is_bool($this->valid)) {
             if (!method_exists($this->getValidator(), 'validate')) {
                 throw new FormElementException('Validator `' . get_class(
                         $this->getValidator()
                     ) . '` does not have method `valid`');
             }
             $this->valid = $this->getValidator()->validate($this->getValue());
-        } else {
-            $this->valid = true;
         }
+
         return $this->valid;
     }
 

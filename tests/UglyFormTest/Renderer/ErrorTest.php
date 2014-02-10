@@ -29,8 +29,13 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
     public function testRendererReturnsDefaultsWhenInvalid()
     {
         $form = new Form('form');
+
         $element = $form->addElement('element');
         $element->setValidator(Validator::create()->alwaysInvalid());
+
+        $form->setValues(array('element' => 'foo'));
+        $form->isValid();
+
         $renderer = new Error();
 
         $output = '<div>Validation Error</div>';
@@ -42,6 +47,10 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
         $form = new Form('form');
         $element = $form->addElement('element');
         $element->setValidator(Validator::create()->alwaysInvalid());
+
+        $form->setValues(array('element' => 'foo'));
+        $form->isValid();
+
         $renderer = new Error();
 
         $attribute = array(
