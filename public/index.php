@@ -1,28 +1,48 @@
 <?php
+
 chdir('../');
 require_once('vendor/autoload.php');
 
-$form = new \UglyForm\Form\Form('login');
+$form = new \UglyForm\Form\Form('register');
 $form->addElement('username')->setValidator(\Respect\Validation\Validator::create()->email()->notEmpty());
-$form->addElement('password')->setValidator(\Respect\Validation\Validator::create()->string()->notEmpty()->length(5, 256));
+$form->addElement('password')->setValidator(
+    \Respect\Validation\Validator::create()->string()->notEmpty()->length(5, 256)
+);
+
+$passwordMatch = $form->addElement('password-match');
+$passwordMatch->setValidator(
+    \Respect\Validation\Validator::create()->string()->notEmpty()->length(5, 256)
+);
+$passwordMatch->setLabel('Password Match');
+
 $form->addElement('submit')->setTag('button');
 $form->getElement('submit')->setAttributes(array('type' => 'submit'));
-$form->getElement('submit')->setValue('Login');
+$form->getElement('submit')->setValue('Register');
 
 $form->setDefaultElementAttributes(
     array(
-        'class' => 'form-control col-xs-6'
+        'class' => 'form-control'
     )
 );
 
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form->setValues($_POST);
+    $form->getElement('password-match')->setValidator(
+        $form->getElement('password-match')->getValidator()->equals($form->getElement('password')->getValue()
+    ));
 }
 
 $renderer = new \UglyForm\Renderer\Row();
 $renderer->setWrapperAttributes(
     array(
-        'class' => 'form-group'
+        'class' => 'form-group col-md-7'
+    )
+);
+
+$errorRenderer = new \UglyForm\Renderer\Error();
+$errorRenderer->setDefaultAttributes(
+    array(
+        'class' => 'has-error'
     )
 );
 ?>
@@ -45,9 +65,19 @@ $renderer->setWrapperAttributes(
 <body>
 
 <div class="container well well-lg">
-    <form class="form-inline" name="form" method="post" role="form">
-        <?php echo $renderer->render($form, 'username'); ?>
-        <?php echo $renderer->render($form, 'password'); ?>
+    <form class="form" name="form" method="post" role="form">
+        <?php echo $renderer->render(
+            $form,
+            'username',
+            array('message' => 'Please enter a valid email address')
+        ); ?>
+        <?php echo $renderer->render($form, 'password', array('message' => 'Please enter a valid password')); ?>
+        <?php echo $renderer->render(
+            $form,
+            'password-match',
+            array('message' => 'Passwords must match')
+        ); ?>
+
         <?php $renderer->setRenderLabel(false); ?>
         <?php echo $renderer->render($form, 'submit'); ?>
     </form>

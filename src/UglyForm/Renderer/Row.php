@@ -45,37 +45,53 @@ class Row implements RendererInterface
      * @var bool
      */
     protected $renderWrapper = true;
+    /**
+     * @var string
+     */
+    protected $errorClass = 'has-error';
 
     /**
-     * @return boolean
+     * @param Form $form
+     * @param $name
+     * @param array $attributes
+     * @return mixed|void
      */
-    public function getRenderError()
+    public function render(Form $form, $name, array $attributes = array())
     {
-        return $this->renderError;
-    }
 
-    /**
-     * @param boolean $renderError
-     */
-    public function setRenderError($renderError)
-    {
-        $this->renderError = $renderError;
-    }
+        $html = '';
+        $element = $form->getElement($name);
+        $mergedAttributes = $this->mergeAttributes($form, $element, $attributes);
 
-    /**
-     * @return boolean
-     */
-    public function getRenderLabel()
-    {
-        return $this->renderLabel;
-    }
 
-    /**
-     * @param boolean $renderLabel
-     */
-    public function setRenderLabel($renderLabel)
-    {
-        $this->renderLabel = $renderLabel;
+        if ($this->getRenderWrapper()) {
+            $html .= "<{$this->getWrapper()} ";
+            $wrapperAttributes = $this->getWrapperAttributes();
+            if ($this->errorClass && !$element->isValid()) {
+                $wrapperAttributes['class'] .= ' ' . $this->errorClass;
+            }
+            foreach ($wrapperAttributes as $key => $value) {
+                $html .= "$key=\"$value\" ";
+            }
+            $html = rtrim($html);
+            $html .= '>';
+        }
+
+        if ($this->getRenderError()) {
+            $html .= $this->getErrorRenderer()->render($form, $name, $attributes);
+        }
+
+        if ($this->getRenderLabel()) {
+            $html .= $this->getLabelRenderer()->render($form, $name, $attributes);
+        }
+
+        $html .= $this->getElementRenderer()->render($form, $name, $mergedAttributes);
+
+        if ($this->renderWrapper) {
+            $html .= "</{$this->wrapper}>";
+        }
+
+        return $html;
     }
 
     /**
@@ -127,41 +143,19 @@ class Row implements RendererInterface
     }
 
     /**
-     * @param Form $form
-     * @param $name
-     * @param array $attributes
-     * @return mixed|void
+     * @return boolean
      */
-    public function render(Form $form, $name, array $attributes = array())
+    public function getRenderError()
     {
-        $html = '';
-        $element = $form->getElement($name);
-        $attributes = $this->mergeAttributes($form, $element, $attributes);
+        return $this->renderError;
+    }
 
-        if ($this->getRenderWrapper()) {
-            $html .= "<{$this->getWrapper()} ";
-            foreach ($this->getWrapperAttributes() as $key => $value) {
-                $html .= "$key=\"$value\" ";
-            }
-            $html = rtrim($html);
-            $html .= '>';
-        }
-
-        if ($this->getRenderError()) {
-            $html .= $this->getErrorRenderer()->render($form, $name);
-        }
-
-        if ($this->getRenderLabel()) {
-            $html .= $this->getLabelRenderer()->render($form, $name);
-        }
-
-        $html .= $this->getElementRenderer()->render($form, $name, $attributes);
-
-        if ($this->renderWrapper) {
-            $html .= "</{$this->wrapper}>";
-        }
-
-        return $html;
+    /**
+     * @param boolean $renderError
+     */
+    public function setRenderError($renderError)
+    {
+        $this->renderError = $renderError;
     }
 
     /**
@@ -181,6 +175,22 @@ class Row implements RendererInterface
     public function setErrorRenderer(RendererInterface $errorRenderer)
     {
         $this->errorRenderer = $errorRenderer;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRenderLabel()
+    {
+        return $this->renderLabel;
+    }
+
+    /**
+     * @param boolean $renderLabel
+     */
+    public function setRenderLabel($renderLabel)
+    {
+        $this->renderLabel = $renderLabel;
     }
 
     /**

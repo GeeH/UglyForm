@@ -14,6 +14,15 @@ namespace UglyForm\Renderer;
 trait RendererTrait
 {
 
+    /**
+     * @var array
+     */
+    protected $defaultAttributes = array();
+    /**
+     * Tags that don't need a closing tag and can be opened with />
+     *
+     * @var array
+     */
     protected $inLineTags = array('button', 'submit', 'textarea');
 
     /**
@@ -24,27 +33,53 @@ trait RendererTrait
      * @return array
      */
     public function mergeAttributes(
-        \UglyForm\Form\Form $form,
-        \UglyForm\Form\Element $element,
-        array $attributes,
+        \UglyForm\Form\Form $form = null,
+        \UglyForm\Form\Element $element = null,
+        array $attributes = null,
         $pushBack = true
     ) {
-        $attributes = array_merge($form->getDefaultElementAttributes(), $element->getattributes(), $attributes);
 
-        if (!array_key_exists('type', $attributes)) {
+        is_null($form) ? $formArray = array() : $formArray = $form->getDefaultElementAttributes();
+        is_null($element) ? $elementArray = array() : $elementArray = $element->getAttributes();
+        is_null($attributes) ? $attributeArray = array() : $attributeArray = $attributes;
+
+        $attributes = array_merge(
+            $formArray,
+            $elementArray,
+            $this->getDefaultAttributes(),
+            $attributeArray
+        );
+
+        if (!array_key_exists('type', $attributes) && !is_null($element)) {
             $attributes['type'] = constant(
                 'UglyForm\Renderer\Element::DEFAULT_' . strtoupper($element->getTag()) . '_TYPE'
             );
         }
 
-        if (!array_key_exists('id', $attributes)) {
+        if (!array_key_exists('id', $attributes) && !is_null($form)) {
             $attributes['id'] = $form->getName() . '-' . $element->getName();
         }
 
-        if ($pushBack) {
+        if ($pushBack && !is_null($element)) {
             $element->setattributes($attributes);
         }
 
         return $attributes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDefaultAttributes()
+    {
+        return $this->defaultAttributes;
+    }
+
+    /**
+     * @param array $defaultAttributes
+     */
+    public function setDefaultAttributes(array $defaultAttributes)
+    {
+        $this->defaultAttributes = $defaultAttributes;
     }
 } 

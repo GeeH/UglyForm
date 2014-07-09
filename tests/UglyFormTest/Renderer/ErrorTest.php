@@ -62,5 +62,52 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
         $output = '<span class="error-message">Element must contain a chipmunk</span>';
         $this->assertEquals($output, $renderer->render($form, 'element', $attribute));
     }
+
+    public function testValidFormDoesntRenderErrors()
+    {
+        $form = new Form('form');
+        $element = $form->addElement('element');
+        $element->setValidator(Validator::create()->alwaysValid());
+
+        $nextElement = $form->addElement('another-element');
+        $nextElement->setValidator(Validator::create()->alwaysInvalid());
+
+        $form->setValues(array('element' => 'foo'));
+        $form->isValid();
+
+        $renderer = new Error();
+
+        $attribute = array(
+            'message' => 'Element must contain a chipmunk',
+            'tag' => 'span',
+            'class' => 'error-message',
+        );
+
+        $output = '';
+        $this->assertEquals($output, $renderer->render($form, 'element', $attribute));
+    }
+
+    public function testSettingDefaultAttributes()
+    {
+        $form = new Form('form');
+        $element = $form->addElement('element');
+        $element->setValidator(Validator::create()->alwaysInvalid());
+
+        $form->setValues(array('element' => 'foo'));
+        $form->isValid();
+
+        $renderer = new Error();
+
+        $attribute = array(
+            'message' => 'Element must contain a chipmunk',
+            'tag' => 'span',
+            'class' => 'error-message',
+        );
+
+        $renderer->setDefaultAttributes($attribute);
+
+        $output = '<span class="error-message">Element must contain a chipmunk</span>';
+        $this->assertEquals($output, $renderer->render($form, 'element'));
+    }
 }
  

@@ -94,7 +94,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->renderer->setRenderLabel(false);
         $this->renderer->setRenderError(true);
 
-        $output = '<div class="test"><div>Validation Error</div><input name="username" value="foo" type="text" id="test-username" /></div>';
+        $output = '<div class="test has-error"><div>Validation Error</div><input name="username" value="foo" type="text" id="test-username" /></div>';
         $this->assertEquals($output, $this->renderer->render($form, 'username'));
     }
 

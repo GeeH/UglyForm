@@ -13,24 +13,28 @@ class Error implements RendererInterface
 {
     use RendererTrait;
 
+    /** default tag to render errors with */
     const DEFAULT_ERROR_TAG = 'div';
+    /** default message to render if there is an error */
     const DEFAULT_ERROR_MESSAGE = 'Validation Error';
 
     public function render(Form $form, $name, array $attributes = array())
     {
-        if(is_null($form->isValid()) || $form->isValid() || !$form->getPopulated()) {
+        if (is_null($form->isValid()) || $form->isValid() || !$form->getPopulated()) {
             return false;
         }
 
         $element = $form->getElement($name);
 
-        if (!array_key_exists('tag', $attributes)) {
+        if (!array_key_exists('tag', $attributes) && !array_key_exists('tag', $this->getDefaultAttributes())) {
             $attributes['tag'] = self::DEFAULT_ERROR_TAG;
         }
 
-        if (!array_key_exists('message', $attributes)) {
+        if (!array_key_exists('message', $attributes) && !array_key_exists('message', $this->getDefaultAttributes())) {
             $attributes['message'] = self::DEFAULT_ERROR_MESSAGE;
         }
+
+        $attributes = $this->mergeAttributes(null, null, $attributes);
 
         if ($element->isValid()) {
             return '';
